@@ -80,28 +80,29 @@ class LawofLargeNumbers(Scene):
     self.wait(5)
 
 class Coin(Scene):
-  #CONFIG = {
-  #  "x_min": -2,
-  #  "x_max": 100,
-  #  "y_min": -2,
-  #  "y_max": 10,
-  #  "x_tick_frequency": 0.25
-  #}
+
   def construct(self):
-    #self.setup_axes(animate = True)
-    text_1 = "Number of throws: "
-    #dots = VGroup(*[Dot(point=[random.randint(0,1), 0, 0]) for _ in range(10)]) #[random.randint(0, 1) for coin in range(100)]
-    #position = [random.randint(0, 1) for _ in range(100)]
-    #for dot in dots:
-    #  self.play(FadeInFrom(dot))
-    # counts = [count for count in CoinFlip(100)]
-    num_dots = 100
+    n = NumberLine(
+      include_tip = False,
+      include_numbers = True,
+      x_min = 0,
+      x_max = 6,
+      x_leftmost_tick = 0
+    )
+    #self.add(n)
+
+    counter = TextMobject("Number of throws: ", "0")
+    counter.to_edge(UP)
+    self.play(FadeIn(counter))
+
+    num_dots = 21
     num_flips = 10
     for l in range(num_dots):
       #The position of the falling dots in the screen
-      pos = CoinFlip(num_flips)/5 - 4
-      dot = Dot(point = [pos, -1.5, 0])
-      self.play(FadeInFrom(dot, [pos, 10,0]))
+      pos = CoinFlip(num_flips) - 5
+      dot = Dot(point = [pos, -2, 0])
+      self.play(FadeInFrom(dot, [0, 10,0]),
+                Transform(counter[1], TextMobject(str(l)).to_edge(UP + RIGHT*9.6)))
     self.wait(5)
 
 class NormalDistribution(GraphScene):
