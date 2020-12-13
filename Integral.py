@@ -41,68 +41,6 @@ class ToC(Scene):
     for element in toc:
       self.play(FadeIn(element, lag_ratio=0.1, run_time=2))
 
-class TableofContents(Scene):
-  def construct(self):
-    text = TextMobject("Table of Contents")
-    text.scale(3)
-    transform_text = TextMobject("Table of Contents")
-    transform_text.to_corner(UP + LEFT)
-    self.play(FadeInFromDown(text))
-    self.wait(2)
-    #text.to_corner(UP + LEFT)
-    self.play(
-      Transform(text, transform_text)
-    )
-    #self.play(Write(TextMobject("\\hline")))
-    self.wait(2)
-
-    self.play(FadeInFromDown(text_1), run_time=2)
-    self.wait(3)
-    transform_text_1 = TextMobject("1. Montecarlo Methods")
-    #transform_text_1.to_corner(2.5*UP + LEFT)
-    transform_text_1.next_to(text, DOWN, aligned_edge=LEFT)
-    transform_text_1.scale(0.7)
-    self.play(
-      Transform(text_1, transform_text_1)
-    )
-    self.wait(2)
-
-    self.play(FadeInFromDown(text_2), run_time=2)
-    self.wait(3)
-    transform_text_2 = TextMobject("2. Law of Large Numbers")
-    #transform_text_2.to_corner(3.5*(UP) + LEFT)
-    transform_text_2.next_to(transform_text_1, DOWN, aligned_edge= LEF)
-    transform_text_2.scale(0.7)
-    VGroup(transform_text_1, transform_text_2)
-    self.play(
-      Transform(text_2, transform_text_2)
-    )
-    self.wait(2)
-
-    self.play(FadeInFromDown(text_3), run_time=2)
-    self.wait(3)
-    transform_text_3 = TextMobject("3. Integration", aligned_edge=LEFT)
-    #transform_text_3.to_corner(4.5*(UP) + LEFT)
-    transform_text_3.next_to(transform_text_2, DOWN)
-    transform_text_3.scale(0.7)
-    self.play(
-      Transform(text_3, transform_text_3)
-    )
-    self.wait(2)
-
-    self.play(FadeInFromDown(text_4), run_time=2)
-    self.wait(3)
-    transform_text_4 = TextMobject("4. Montecarlo Integration")
-    transform_text_4.to_corner(5.5* (UP) + LEFT)
-    transform_text_4.next_to(transform_text_3, DOWN)
-    transform_text_4.scale(0.7)
-
-    self.play(
-      Transform(text_4, transform_text_4)
-    )
-    self.wait(2)
-
-
 class Integral(Scene):
   def construct(self):
     n = NumberPlane(
