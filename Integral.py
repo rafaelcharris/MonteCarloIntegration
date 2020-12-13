@@ -61,6 +61,37 @@ class Integral(Scene):
 # WHAT IS A MONTECARLO PROCESS,
 # WHAT IS A MONTECARLO INTERGAL
 
+class Montecarlo(Scene):
+  def construct(self):
+    su_img = ImageMobject("./assets/img/ulman.jpg")
+    su_img.to_edge(2*LEFT)
+    su_img.scale(1.8)
+    su_name = TextMobject("Stanislaw Ulam")
+    su_name.next_to(su_img, DOWN)
+    su_name.scale(0.7)
+
+    jvn_img = ImageMobject("./assets/img/jvn")
+    jvn_img.next_to(su_img, RIGHT)
+    jvn_img.scale(1.8)
+    jvn_name = TextMobject("John von Neumann")
+    jvn_name.next_to(jvn_img, DOWN)
+    jvn_name.scale(0.7)
+
+
+    title = TextMobject("Montecarlo Methods")
+    title.scale(2)
+    transform_text = TextMobject("Montecarlo Methods")
+    transform_text.to_corner(UP + LEFT)
+
+    self.play(FadeIn(title))
+
+    self.play(Transform(title, transform_text, run_time = 1),
+              FadeIn(su_img),
+              FadeIn(su_name),
+              FadeIn(jvn_img, lag_ratio = 0.1),
+              FadeIn(jvn_name, lag_ratio = 0.1)
+              )
+    self.wait(2)
 
 class LawofLargeNumbers(Scene):
   CONFIG = {
