@@ -79,32 +79,27 @@ class LawofLargeNumbers(Scene):
     self.play(FadeInFromDown(code), run_time = 5)
     self.wait(5)
 
-class Coin(GraphScene):
-  CONFIG = {
-    "x_min": -2,
-    "x_max": 6,
-    "y_min": -4,
-    "y_max": 10
-  }
+class Coin(Scene):
+  #CONFIG = {
+  #  "x_min": -2,
+  #  "x_max": 100,
+  #  "y_min": -2,
+  #  "y_max": 10,
+  #  "x_tick_frequency": 0.25
+  #}
   def construct(self):
-    self.setup_axes(animate = True)
+    #self.setup_axes(animate = True)
     text_1 = "Number of throws: "
     #dots = VGroup(*[Dot(point=[random.randint(0,1), 0, 0]) for _ in range(10)]) #[random.randint(0, 1) for coin in range(100)]
     #position = [random.randint(0, 1) for _ in range(100)]
     #for dot in dots:
     #  self.play(FadeInFrom(dot))
     # counts = [count for count in CoinFlip(100)]
-    num_dots = 10
+    num_dots = 100
+    num_flips = 10
     for l in range(num_dots):
-      pos = random.randint(0, 1)
-      dot = Dot(point = [pos, -1.5, 0])
-      self.play(FadeInFrom(dot, [pos, 10,0]))
-    self.wait(5)
-
-    for l in range(num_dots):
-      #for x in range():
-      count = 0
-      pos = random.randint(0, 1)
+      #The position of the falling dots in the screen
+      pos = CoinFlip(num_flips)/5 - 4
       dot = Dot(point = [pos, -1.5, 0])
       self.play(FadeInFrom(dot, [pos, 10,0]))
     self.wait(5)
@@ -117,7 +112,6 @@ class NormalDistribution(GraphScene):
     "y_max": 10
   }
   def construct(self):
-
     fun = FunctionGraph(lambda x: (1/1*math.sqrt(2*math.pi))*math.e**(-1/2*((x-0)/1)**2))
     #def fun(x):
     #  return (1/1*math.sqrt(2*math.pi))*math.e**(-1/2*((x-0)/1)**2)
