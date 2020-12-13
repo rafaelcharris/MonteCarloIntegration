@@ -1,0 +1,251 @@
+from manimlib.imports import *
+
+import random
+
+def CoinFlip(times):
+    "Return the number of heads"
+    return sum([random.randint(0, 1) for _ in range(times)])
+
+class Introduction(Scene):
+  def construct(self):
+    text = TextMobject("Montecarlo Integration")
+    text.scale(2)
+
+    self.play(Write(text))
+    self.wait(3)
+
+    integral = TexMobject(r"\int_{a}^{b}f(x)dx")
+    integral.scale(3)
+
+    self.play(Transform(text, integral))
+    self.wait(3)
+
+class ToC(Scene):
+  def construct(self):
+    text = TextMobject("Table of Contents")
+    text.scale(2)
+    transform_text = TextMobject("Table of Contents")
+    transform_text.to_corner(UP + LEFT)
+    self.play(FadeInFromDown(text))
+    self.wait(2)
+    self.play(
+      Transform(text, transform_text)
+    )
+    toc = VGroup(TextMobject("1. Montecarlo Methods"),
+                 TextMobject("2. Law of Large Numbers"),
+                 TextMobject("3. Integration"),
+                 TextMobject("4. Montecarlo Integration"))
+    toc.arrange(DOWN, buff=LARGE_BUFF, aligned_edge=LEFT)
+    toc.to_edge(DOWN, buff=LARGE_BUFF)
+
+    for element in toc:
+      self.play(FadeIn(element, lag_ratio=0.1, run_time=2))
+
+class TableofContents(Scene):
+  def construct(self):
+    text = TextMobject("Table of Contents")
+    text.scale(3)
+    transform_text = TextMobject("Table of Contents")
+    transform_text.to_corner(UP + LEFT)
+    self.play(FadeInFromDown(text))
+    self.wait(2)
+    #text.to_corner(UP + LEFT)
+    self.play(
+      Transform(text, transform_text)
+    )
+    #self.play(Write(TextMobject("\\hline")))
+    self.wait(2)
+
+    self.play(FadeInFromDown(text_1), run_time=2)
+    self.wait(3)
+    transform_text_1 = TextMobject("1. Montecarlo Methods")
+    #transform_text_1.to_corner(2.5*UP + LEFT)
+    transform_text_1.next_to(text, DOWN, aligned_edge=LEFT)
+    transform_text_1.scale(0.7)
+    self.play(
+      Transform(text_1, transform_text_1)
+    )
+    self.wait(2)
+
+    self.play(FadeInFromDown(text_2), run_time=2)
+    self.wait(3)
+    transform_text_2 = TextMobject("2. Law of Large Numbers")
+    #transform_text_2.to_corner(3.5*(UP) + LEFT)
+    transform_text_2.next_to(transform_text_1, DOWN, aligned_edge= LEF)
+    transform_text_2.scale(0.7)
+    VGroup(transform_text_1, transform_text_2)
+    self.play(
+      Transform(text_2, transform_text_2)
+    )
+    self.wait(2)
+
+    self.play(FadeInFromDown(text_3), run_time=2)
+    self.wait(3)
+    transform_text_3 = TextMobject("3. Integration", aligned_edge=LEFT)
+    #transform_text_3.to_corner(4.5*(UP) + LEFT)
+    transform_text_3.next_to(transform_text_2, DOWN)
+    transform_text_3.scale(0.7)
+    self.play(
+      Transform(text_3, transform_text_3)
+    )
+    self.wait(2)
+
+    self.play(FadeInFromDown(text_4), run_time=2)
+    self.wait(3)
+    transform_text_4 = TextMobject("4. Montecarlo Integration")
+    transform_text_4.to_corner(5.5* (UP) + LEFT)
+    transform_text_4.next_to(transform_text_3, DOWN)
+    transform_text_4.scale(0.7)
+
+    self.play(
+      Transform(text_4, transform_text_4)
+    )
+    self.wait(2)
+
+
+class Integral(Scene):
+  def construct(self):
+    n = NumberPlane(
+      x_min = -10,
+      x_max = 10,
+      y_min=-10,
+      y_max=10,
+      include_tip = False
+    )
+    f = FunctionGraph(lambda x: x**3 - x**2 + 1)
+
+    self.add(n)
+    self.wait(10)
+
+    self.play(Write(f), run_time = 7)
+    self.wait(7)
+#TODO: WHAT IS AN INTEGRAL,
+# WHAT IS A MONTECARLO PROCESS,
+# WHAT IS A MONTECARLO INTERGAL
+
+
+class LawofLargeNumbers(Scene):
+  CONFIG = {
+    "code_config":{
+      "file_name": "./assets/CoinFlip.py",
+      "font": "Fira Code",
+      "tab_width": 3,
+      "style": "monokai",
+      "language": "python"
+    }
+  }
+  def setup(self):
+    code = Code(**self.code_config)
+    code.set_width(FRAME_WIDTH-1)
+    code.move_to(ORIGIN)
+    self.play(FadeInFromDown(code), run_time = 5)
+    self.wait(5)
+
+class Coin(GraphScene):
+  CONFIG = {
+    "x_min": -2,
+    "x_max": 6,
+    "y_min": -4,
+    "y_max": 10
+  }
+  def construct(self):
+    self.setup_axes(animate = True)
+    text_1 = "Number of throws: "
+    #dots = VGroup(*[Dot(point=[random.randint(0,1), 0, 0]) for _ in range(10)]) #[random.randint(0, 1) for coin in range(100)]
+    #position = [random.randint(0, 1) for _ in range(100)]
+    #for dot in dots:
+    #  self.play(FadeInFrom(dot))
+    # counts = [count for count in CoinFlip(100)]
+    num_dots = 10
+    for l in range(num_dots):
+      pos = random.randint(0, 1)
+      dot = Dot(point = [pos, -1.5, 0])
+      self.play(FadeInFrom(dot, [pos, 10,0]))
+    self.wait(5)
+
+    for l in range(num_dots):
+      #for x in range():
+      count = 0
+      pos = random.randint(0, 1)
+      dot = Dot(point = [pos, -1.5, 0])
+      self.play(FadeInFrom(dot, [pos, 10,0]))
+    self.wait(5)
+
+class NormalDistribution(GraphScene):
+  CONFIG = {
+    "x_min": -2,
+    "x_max": 6,
+    "y_min": -4,
+    "y_max": 10
+  }
+  def construct(self):
+
+    fun = FunctionGraph(lambda x: (1/1*math.sqrt(2*math.pi))*math.e**(-1/2*((x-0)/1)**2))
+    #def fun(x):
+    #  return (1/1*math.sqrt(2*math.pi))*math.e**(-1/2*((x-0)/1)**2)
+
+    graph = self.get_graph(fun, x_min=0.3, x_max=9.2)
+    label_graph = self.get_graph_label(fun, label = "y = f(x)")
+    self.play(Write(fun), Write(label_graph), run_time=7)
+    self.wait(5)
+
+
+class RiemannRectanglesAnimation(GraphScene):
+    CONFIG = {
+      "y_max": 8,
+      "y_axis_height": 5,
+      "init_dx": 0.5,
+    }
+
+    def construct(self):
+      self.setup_axes()
+
+      def func(x):
+        return 0.1 * (x + 3 - 5) * (x - 3 - 5) * (x - 5) + 5
+
+      graph = self.get_graph(func, x_min=0.3, x_max=9.2)
+      kwargs = {
+        "x_min": 2,
+        "x_max": 8,
+        "fill_opacity": 0.75,
+        "stroke_width": 0.25,
+      }
+      flat_rectangles = self.get_riemann_rectangles(
+        self.get_graph(lambda x: 0),
+        dx=self.init_dx,
+        start_color=invert_color(PURPLE),
+        end_color=invert_color(ORANGE),
+        **kwargs
+      )
+      riemann_rectangles_list = self.get_riemann_rectangles_list(
+        graph,
+        6,
+        max_dx=self.init_dx,
+        power_base=2,
+        start_color=PURPLE,
+        end_color=ORANGE,
+        **kwargs
+      )
+      title = TextMobject("Integration")
+      self.play(FadeInFromDown(title), run_time = 2)
+      self.wait(3)
+      transform_title = TextMobject("Integration")
+      transform_title.to_corner(UP + LEFT)
+      self.play(
+        Transform(title, transform_title)
+      )
+      self.wait(2)
+
+      self.play(Write(graph), run_time = 5)
+      self.wait(3)
+      # Show Riemann rectangles
+      self.play(ReplacementTransform(flat_rectangles, riemann_rectangles_list[0]))
+      self.wait()
+      for r in range(1, len(riemann_rectangles_list)):
+        self.transform_between_riemann_rects(
+          riemann_rectangles_list[r - 1],
+          riemann_rectangles_list[r],
+          replace_mobject_with_target_in_scene=True,
+        )
+      self.wait(3)
+
