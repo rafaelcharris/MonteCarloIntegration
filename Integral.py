@@ -70,13 +70,12 @@ class Montecarlo(Scene):
     su_name.next_to(su_img, DOWN)
     su_name.scale(0.7)
 
-    jvn_img = ImageMobject("./assets/img/jvn")
-    jvn_img.next_to(su_img, RIGHT)
+    jvn_img = ImageMobject("./assets/img/jvn.jpg")
+    jvn_img.next_to(su_img, RIGHT, buff = 2)
     jvn_img.scale(1.8)
     jvn_name = TextMobject("John von Neumann")
     jvn_name.next_to(jvn_img, DOWN)
     jvn_name.scale(0.7)
-
 
     title = TextMobject("Montecarlo Methods")
     title.scale(2)
@@ -88,10 +87,17 @@ class Montecarlo(Scene):
     self.play(Transform(title, transform_text, run_time = 1),
               FadeIn(su_img),
               FadeIn(su_name),
-              FadeIn(jvn_img, lag_ratio = 0.1),
-              FadeIn(jvn_name, lag_ratio = 0.1)
+              FadeIn(jvn_img, lag_ratio = 1),
+              FadeIn(jvn_name, lag_ratio = 1)
               )
     self.wait(2)
+
+    dice = SVGMobject("./assets/img/dice.svg")
+    dice.to_edge(RIGHT)
+    dice.scale(2)
+    self.play(Write(dice))
+    self.wait(2)
+
 
 class LawofLargeNumbers(Scene):
   CONFIG = {
