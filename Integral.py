@@ -203,10 +203,13 @@ class EstimatePi(GraphScene):
     red_count = 0
     blue_count = 0
     for point in range(num_points):
+        #define coordinates
         x = 2*random.random() if random.random() > 0.5 else -2*random.random()
         y = 2*random.random() if random.random() > 0.5 else -2*random.random()
-        #Make color conditional on where it lands
 
+
+
+        #Make color conditional on where it lands
         if x**2 + y**2 > 4.1:
           p = SmallDot([x,y, 0], color = BLUE)
           self.play(
@@ -280,37 +283,17 @@ class MonteCarloIntegration(GraphScene):
     "x_min": -2,
     "x_max": 6,
     "y_min": -4,
-    "y_max": 10
+    "y_max": 5
+
   }
+
+  def func(self, x):
+     return math.e**math.sin(x)
+
   def construct(self):
-    def func(x):
-      return 0.1 * (x + 3 - 5) * (x - 3 - 5) * (x - 5) + 5
+    self.setup_axes(animate = True)
 
-    graph = self.get_graph(fun, x_min=0.3, x_max=9.2)
-    label_graph = self.get_graph_label(fun, label = "y = f(x)")
-
-    kwargs = {
-      "x_min": 2,
-      "x_max": 8,
-      "fill_opacity": 0.75,
-      "stroke_width": 0.25,
-    }
-    flat_rectangles = self.get_riemann_rectangles(
-      self.get_graph(lambda x: 0),
-      dx=self.init_dx,
-      start_color=invert_color(PURPLE),
-      end_color=invert_color(ORANGE),
-      **kwargs
-    )
-    riemann_rectangles_list = self.get_riemann_rectangles_list(
-      graph,
-      6,
-      max_dx=self.init_dx,
-      power_base=2,
-      start_color=PURPLE,
-      end_color=ORANGE,
-      **kwargs
-    )
-
-    self.play(Write(graph), Write(label_graph), run_time=7)
+    graph = self.get_graph(self.func, run_time = 3)
+    graph_l = self.get_graph_label(graph, label = "y = e^{sin(x)}", direction=UP + RIGHT)
+    self.play(Write(graph), Write(graph_l,run_time = 7))
     self.wait(5)
