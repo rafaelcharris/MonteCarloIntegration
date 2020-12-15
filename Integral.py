@@ -277,7 +277,7 @@ class Coin(Scene):
       self.play(FadeInFrom(dot, [0, 10,0]),
                 Transform(counter[1], TextMobject(str(l)).to_edge(UP + RIGHT*9.6)))
     self.wait(5)
-
+    self.step_formula()
 class MonteCarloIntegration(GraphScene, ZoomedScene):
   CONFIG = {
     "x_min": -2,
@@ -304,7 +304,55 @@ class MonteCarloIntegration(GraphScene, ZoomedScene):
     area2 = self.get_area(graph, 1, 4)
     self.play(Write(line1, run_time = 4), Write(line2),
               Write(area2, run_time = 2, lag_ratio = 1))
+    self.wait(2)
+
+    #Not sure which one of these should I leave
+    self.play(FadeOut(area2))
+
+class MonteCarloIntegrationpt2(GraphScene):
+  CONFIG = {
+    "x_min": -2,
+    "x_max": 6,
+    "y_min": -4,
+    "y_max": 5,
+    "default_riemann_start_color": RED,
+    "default_riemann_end_color": RED,
+    "num_rects": 1,
+    "area_opacity": 0.5,
+  }
+  def func(self, x):
+     return math.e**math.sin(x)
+
+  def construct(self):
+    self.setup_axes()
+
+    graph = self.get_graph(self.func)
+    graph_l = self.get_graph_label(graph, label = "y = e^{sin(x)}", direction=UP + RIGHT)
+    self.add(graph)
+    self.add(graph_l.scale(0.7))
+
+    line1 = self.get_vertical_line_to_graph(1, graph, DashedLine, color=YELLOW)
+    line2 = self.get_vertical_line_to_graph(4, graph, DashedLine, color=YELLOW)
+
+    self.add(line1)
+    self.add(line2)
+
+    #Random point to create rectangle
+    x_point = random.uniform(1, 4)
+    y_point = math.e**math.sin(x_point)
+    transform = self.coords_to_point(x_point, y_point)
+    point = SmallDot(transform, color=RED)
+    line3 = self.get_vertical_line_to_graph(x_point, graph, DashedLine, color=RED)
+    self.play(FadeIn(point), Write(line3, run_time = 1))
     self.wait()
+
+    #Draw one rectangle
+    #i just neeed the horizontal line and the area of this
+
+    hline = self.get_graph(lambda x: y_point, x_min = 1, x_max=4, color= RED)
+    area3 = self.get_area(hline, 1, 4)
+
+    self.play(Write(hline), Write(area3))
 
 class MontecarloPython(Scene):
     CONFIG = {
