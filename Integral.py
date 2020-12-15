@@ -190,6 +190,15 @@ class EstimatePi(GraphScene):
     counter[1].next_to(counter[0], DOWN)
     self.play(FadeIn(counter))
 
+    estimate = VGroup(TextMobject("\\pi: ", color=RED),
+                     TextMobject("N: ", color=BLUE))
+    estimate.arrange(RIGHT,
+                    aligned_edge=RIGHT,
+                    buff=LARGE_BUFF)
+    estimate.to_edge(RIGHT)
+    estimate[1].next_to(estimate[0], DOWN)
+    self.play(FadeIn(estimate))
+
     num_points = 200
     red_count = 0
     blue_count = 0
@@ -211,7 +220,10 @@ class EstimatePi(GraphScene):
                     TextMobject(str(red_count+1), color=RED).next_to(counter[0], RIGHT)))
           red_count += 1
 
-        #TODO: add counter de puntos para estimar PI
+        #Estimate Pi
+        if red_count > 0 and blue_count > 0:
+          pi_estimate = red_count/blue_count
+
         self.play(FadeIn(p))
         self.wait()
     self.wait(7)
