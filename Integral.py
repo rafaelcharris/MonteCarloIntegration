@@ -278,7 +278,7 @@ class Coin(Scene):
                 Transform(counter[1], TextMobject(str(l)).to_edge(UP + RIGHT*9.6)))
     self.wait(5)
 
-class MonteCarloIntegration(GraphScene):
+class MonteCarloIntegration(GraphScene, ZoomedScene):
   CONFIG = {
     "x_min": -2,
     "x_max": 6,
