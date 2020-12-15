@@ -293,6 +293,9 @@ class MonteCarloIntegration(GraphScene, ZoomedScene):
 
   def construct(self):
     self.setup_axes(animate = True)
+    title = TextMobject("Montecarlo Integration")
+    title.to_corner(UP + LEFT)
+    self.play(FadeIn(title))
 
     graph = self.get_graph(self.func)
     graph_l = self.get_graph_label(graph, label = "y = e^{sin(x)}", direction=UP + RIGHT)
@@ -320,14 +323,19 @@ class MonteCarloIntegrationpt2(GraphScene, ZoomedScene):
     "num_rects": 1,
     "area_opacity": 0.5,
     "x_labeled_nums": [1, 4],
-    "zoomed_display_height": 3,
-    "zoomed_display_width": 3
+    "zoomed_display_height": 6,
+    "zoomed_display_width": 6,
+    "zoom_activated": True,
+    "zoom_factor": 0.7,
   }
   def func(self, x):
      return math.e**math.sin(x)
 
   def construct(self):
     self.setup_axes()
+    title = TextMobject("Montecarlo Integration")
+    title.to_edge(LEFT)
+    self.add(title)
 
     graph = self.get_graph(self.func)
     graph_l = self.get_graph_label(graph, label = "y = e^{sin(x)}", direction=UP + RIGHT)
@@ -361,28 +369,29 @@ class MonteCarloIntegrationpt2(GraphScene, ZoomedScene):
     brace_txt1 = brace1.get_text("3")
     brace2 = Brace(area3, direction=RIGHT)
     brace2_txt2 = brace2.get_text(str(round(x_point, 1)))
+    initial_txt = VGroup(brace_txt1, brace2_txt2)
     self.play(FadeIn(brace1),
-              FadeIn(brace_txt1))
+              FadeIn(initial_txt[0].scale(0.7)))
     self.wait(2)
     self.play(FadeIn(brace2),
-              FadeIn(brace2_txt2))
+              FadeIn(initial_txt[1].scale(0.7)))
     self.wait(3)
     # Multiplication
     self.play(FadeOut(brace1), FadeOut(brace2))
+    self.wait()
     area_result = round(x_point*3, 2)
     multi = VGroup(brace2_txt2, TexMobject("\\cdot"),
     brace_txt1, TexMobject(r"="), TexMobject(str(area_result)))
 
     multi.arrange(RIGHT)
 
-    multi2 = multi
-    multi2 = multi2.move_to(0.5*RIGHT)
-    #multi[1].next_to(multi[0], RIGHT)
-    self.play(Transform(multi, multi2, run_time = 2))
+    multi.move_to(0.5*RIGHT)
+
+    self.play(FadeIn(multi), run_time = 3)
     self.wait(3)
 
     #Create another rectangle
-    num_rectangles = 4
+    num_rectangles = 10
     for i in range(num_rectangles):
       # Random point to create rectangle
       x_point = random.uniform(1, 4)
@@ -393,14 +402,12 @@ class MonteCarloIntegrationpt2(GraphScene, ZoomedScene):
       self.play(FadeIn(point), Write(line3, run_time=1))
       self.wait()
 
-      # Draw one rectangle
-      # i just neeed the horizontal line and the area of this
-
       hline = self.get_graph(lambda x: y_point, x_min=1, x_max=4, color=RED)
       area4 = self.get_area(hline, 1, 4)
       self.play(Write(hline), Write(area4))
 
     self.wait(2)
+
 class MontecarloPython(Scene):
     CONFIG = {
         "code_config": {
