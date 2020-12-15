@@ -387,9 +387,10 @@ class MonteCarloIntegrationpt2(GraphScene):
 
     self.play(FadeIn(multi), run_time = 3)
     self.wait(3)
-
+    self.play(FadeOut(multi))
     #Create another rectangle
     num_rectangles = 10
+    estimate_area = []
     for i in range(num_rectangles):
       # Random point to create rectangle
       x_point = random.uniform(1, 4)
@@ -397,18 +398,28 @@ class MonteCarloIntegrationpt2(GraphScene):
       transform = self.coords_to_point(x_point, y_point)
       point = SmallDot(transform, color=RED)
       line = self.get_vertical_line_to_graph(x_point, graph, DashedLine, color=RED)
-      self.play(FadeIn(point), Write(line3, run_time=1))
+      self.play(FadeIn(point), Write(line, run_time=1))
       self.wait()
 
       hline = self.get_graph(lambda x: y_point, x_min=1, x_max=4, color=RED)
       area4 = self.get_area(hline, 1, 4)
       self.play(Write(hline), Write(area4))
 
+      estimate_area.append(3*y_point)
+      estimate_area_np = np.array(estimate_area)
+      estimate_value = TextMobject(str(round(estimate_area_np.mean(), 3)))
+      estimate_text = TextMobject("Estimated Area = ")
+      estimate_group = VGroup(estimate_text, estimate_value)
+      estimate_group.arrange(RIGHT)
+      estimate_group.to_edge(0.2*RIGHT + 0.5*UP)
+      self.play(FadeIn(estimate_group),
+                aligned_edge=LEFT)
     self.wait(2)
 
 class MonteCarloAbstract(GraphScene):
   def construct(self):
     pass
+
 class MontecarloPython(Scene):
     CONFIG = {
         "code_config": {
