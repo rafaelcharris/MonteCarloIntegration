@@ -202,7 +202,7 @@ class EstimatePi(GraphScene):
           p = SmallDot([x,y, 0], color = BLUE)
           self.play(
             Transform(TextMobject(str(blue_count), color = BLUE).next_to(counter[1], RIGHT),
-                      TextMobject(str(red_count + 1), color = BLUE).next_to(counter[1], RIGHT)))
+                      TextMobject(str(blue_count + 1), color = BLUE).next_to(counter[1], RIGHT)))
           blue_count += 1
         else:
           p = SmallDot([x, y, 0], color=RED)
