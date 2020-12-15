@@ -319,6 +319,7 @@ class MonteCarloIntegrationpt2(GraphScene):
     "default_riemann_end_color": RED,
     "num_rects": 1,
     "area_opacity": 0.5,
+    "x_labeled_nums": [1, 4]
   }
   def func(self, x):
      return math.e**math.sin(x)
@@ -351,8 +352,18 @@ class MonteCarloIntegrationpt2(GraphScene):
 
     hline = self.get_graph(lambda x: y_point, x_min = 1, x_max=4, color= RED)
     area3 = self.get_area(hline, 1, 4)
-
     self.play(Write(hline), Write(area3))
+
+    #Add braces
+    brace1 = Brace(area3)
+    brace_txt1 = brace1.get_text("3")
+    brace2 = Brace(area3).rotate(PI/2)
+    brace2_txt2 = brace2.get_text(str(x_point))
+    self.play(FadeIn(brace1),
+              FadeIn(brace_txt1))
+    self.wait(2)
+    self.play(FadeIn(brace2),
+              FadeIn(brace2_txt2))
 
 class MontecarloPython(Scene):
     CONFIG = {
