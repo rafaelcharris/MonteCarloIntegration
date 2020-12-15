@@ -168,9 +168,22 @@ class Montecarlo(Scene):
 
 
 class EstimatePi(GraphScene):
-
+  CONFIG = {
+      "x_min": -1,
+      "x_max": 10,
+      "x_axis_width": 9,
+      "x_tick_frequency": 1,
+      "x_leftmost_tick": None,  # Change if different from x_min
+      "x_labeled_nums": None,
+      "x_axis_label": "$x$",
+      "y_min": -1,
+      "y_max": 10,
+      "y_axis_height": 6,
+      "y_tick_frequency": 1,
+      "y_bottom_tick": None
+      }
   def construct(self):
-
+    self.setup_axes()
     title = TexMobject(r"\text{Estimating } \pi")
     self.play(Write(title.scale(2)))
     title.to_edge(UP + LEFT)
@@ -190,7 +203,7 @@ class EstimatePi(GraphScene):
     counter[1].next_to(counter[0], DOWN)
     self.play(FadeIn(counter))
 
-    estimate = VGroup(TextMobject("\\pi: ", color=RED),
+    estimate = VGroup(TexMobject("\\pi: ", color=RED),
                      TextMobject("N: ", color=BLUE))
     estimate.arrange(RIGHT,
                     aligned_edge=RIGHT,
@@ -206,7 +219,6 @@ class EstimatePi(GraphScene):
         #define coordinates
         x = 2*random.random() if random.random() > 0.5 else -2*random.random()
         y = 2*random.random() if random.random() > 0.5 else -2*random.random()
-
 
 
         #Make color conditional on where it lands
@@ -226,12 +238,19 @@ class EstimatePi(GraphScene):
         #Estimate Pi
         if red_count > 0 and blue_count > 0:
           pi_estimate = red_count/blue_count
-
-        self.play(FadeIn(p))
-        self.wait()
+        else:
+          pi_estimate = 0
+        pi_show = TextMobject(str(pi_estimate))
+        pi_value = ValueTracker(0)
+        pi_tex = DecimalNumber(pi_value.get_value()).add_updater(lambda x: x.set_value(pi_value.get_value()))
+        pi_label = TexMobject(r"\pi =")
+        group = VGroup(pi_label, pi_tex)
+        pi_tex.next_to(pi_tex, LEFT)
+        self.add(group.move_to(ORIGIN))
+        self.play(FadeIn(p),
+                  pi_value.set_value, 10)
+        self.wait(2)
     self.wait(7)
-
-
 
 
 # example of montecarlo: https://academo.org/demos/estimating-pi-monte-carlo/
@@ -416,9 +435,21 @@ class MonteCarloIntegrationpt2(GraphScene):
                 aligned_edge=LEFT)
     self.wait(2)
 
-class MonteCarloAbstract(GraphScene):
+class MonteCarloAbstract(Scene):
   def construct(self):
-    pass
+      title = TextMobject("Montecarlo Integration General")
+      title.to_edge(UP + LEFT)
+      self.play(FadeInFromLarge(title))
+
+      general_equation = TexMobject(r"(b-a)", r"\frac{1}{N}", r"\sum_{i =1}^{N} f(x)")
+      self.play(FadeIn(general_equation[0]))
+      self.wait(2)
+      self.play(FadeIn(general_equation[1]))
+      self.wait(2)
+      self.play(FadeIn(general_equation[2]))
+      self.wait()
+
+
 
 class MontecarloPython(Scene):
     CONFIG = {
