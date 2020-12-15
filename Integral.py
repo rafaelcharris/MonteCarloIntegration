@@ -31,9 +31,9 @@ class ToC(Scene):
     self.play(
       Transform(text, transform_text)
     )
-    toc = VGroup(TextMobject("1. Montecarlo Methods"),
-                 TextMobject("2. Law of Large Numbers"),
-                 TextMobject("3. Integration"),
+    toc = VGroup(TextMobject("1. Integration"),
+                 TextMobject("2. Montecarlo Methods"),
+                 TextMobject("3. Examples"),
                  TextMobject("4. Montecarlo Integration"))
     toc.arrange(DOWN, buff=LARGE_BUFF, aligned_edge=LEFT)
     toc.to_edge(DOWN, buff=LARGE_BUFF)
@@ -181,31 +181,42 @@ class EstimatePi(GraphScene):
 
     self.wait(1)
 
-    counter = VGroup(TextMobject("Inside: ", color = BLUE), TextMobject("Outside: ", color = RED))
+    counter = VGroup(TextMobject("Inside: ", color = RED),
+                     TextMobject("Outside: ", color = BLUE))
     counter.arrange(RIGHT,
-                    aligned_edge=LEFT)
-    counter.to_edge(RIGHT).scale(0.7)
+                    aligned_edge=RIGHT,
+                    buff=LARGE_BUFF)
+    counter.to_edge(LEFT)
+    counter[1].next_to(counter[0], DOWN)
     self.play(FadeIn(counter))
 
-    num_points = 24
+    num_points = 200
+    red_count = 0
+    blue_count = 0
     for point in range(num_points):
         x = 2*random.random() if random.random() > 0.5 else -2*random.random()
         y = 2*random.random() if random.random() > 0.5 else -2*random.random()
         #Make color conditional on where it lands
-        red_count = 0
-        blue_count = 0
+
         if x**2 + y**2 > 4.1:
           p = SmallDot([x,y, 0], color = BLUE)
+          self.play(
+            Transform(TextMobject(str(blue_count), color = BLUE).next_to(counter[1], RIGHT),
+                      TextMobject(str(red_count + 1), color = BLUE).next_to(counter[1], RIGHT)))
           blue_count += 1
         else:
           p = SmallDot([x, y, 0], color=RED)
+          self.play(
+          Transform(TextMobject(str(red_count), color=RED).next_to(counter[0], RIGHT),
+                    TextMobject(str(red_count+1), color=RED).next_to(counter[0], RIGHT)))
           red_count += 1
-        #TODO: add counter de puntos para estimar PI
-        self.play(FadeIn(p),
-                  Transform(TextMobject("0").next_to(counter[0], RIGHT), TextMobject(str(red_count)).next_to(counter[0], RIGHT)))
-        self.wait()
 
+        #TODO: add counter de puntos para estimar PI
+        self.play(FadeIn(p))
+        self.wait()
     self.wait(7)
+
+
 
 
 # example of montecarlo: https://academo.org/demos/estimating-pi-monte-carlo/
@@ -252,7 +263,7 @@ class Coin(Scene):
                 Transform(counter[1], TextMobject(str(l)).to_edge(UP + RIGHT*9.6)))
     self.wait(5)
 
-class NormalDistribution(GraphScene):
+class MonteCarloIntegration(GraphScene):
   CONFIG = {
     "x_min": -2,
     "x_max": 6,
@@ -260,11 +271,34 @@ class NormalDistribution(GraphScene):
     "y_max": 10
   }
   def construct(self):
-    fun = FunctionGraph(lambda x: (1/1*math.sqrt(2*math.pi))*math.e**(-1/2*((x-0)/1)**2))
-    #def fun(x):
-    #  return (1/1*math.sqrt(2*math.pi))*math.e**(-1/2*((x-0)/1)**2)
+    def func(x):
+      return 0.1 * (x + 3 - 5) * (x - 3 - 5) * (x - 5) + 5
 
     graph = self.get_graph(fun, x_min=0.3, x_max=9.2)
     label_graph = self.get_graph_label(fun, label = "y = f(x)")
-    self.play(Write(fun), Write(label_graph), run_time=7)
+
+    kwargs = {
+      "x_min": 2,
+      "x_max": 8,
+      "fill_opacity": 0.75,
+      "stroke_width": 0.25,
+    }
+    flat_rectangles = self.get_riemann_rectangles(
+      self.get_graph(lambda x: 0),
+      dx=self.init_dx,
+      start_color=invert_color(PURPLE),
+      end_color=invert_color(ORANGE),
+      **kwargs
+    )
+    riemann_rectangles_list = self.get_riemann_rectangles_list(
+      graph,
+      6,
+      max_dx=self.init_dx,
+      power_base=2,
+      start_color=PURPLE,
+      end_color=ORANGE,
+      **kwargs
+    )
+
+    self.play(Write(graph), Write(label_graph), run_time=7)
     self.wait(5)
