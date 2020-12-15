@@ -309,7 +309,7 @@ class MonteCarloIntegration(GraphScene, ZoomedScene):
     #Not sure which one of these should I leave
     self.play(FadeOut(area2))
 
-class MonteCarloIntegrationpt2(GraphScene):
+class MonteCarloIntegrationpt2(GraphScene, ZoomedScene):
   CONFIG = {
     "x_min": -2,
     "x_max": 6,
@@ -319,7 +319,9 @@ class MonteCarloIntegrationpt2(GraphScene):
     "default_riemann_end_color": RED,
     "num_rects": 1,
     "area_opacity": 0.5,
-    "x_labeled_nums": [1, 4]
+    "x_labeled_nums": [1, 4],
+    "zoomed_display_height": 3,
+    "zoomed_display_width": 3
   }
   def func(self, x):
      return math.e**math.sin(x)
@@ -357,14 +359,48 @@ class MonteCarloIntegrationpt2(GraphScene):
     #Add braces
     brace1 = Brace(area3)
     brace_txt1 = brace1.get_text("3")
-    brace2 = Brace(area3).rotate(PI/2)
-    brace2_txt2 = brace2.get_text(str(x_point))
+    brace2 = Brace(area3, direction=RIGHT)
+    brace2_txt2 = brace2.get_text(str(round(x_point, 1)))
     self.play(FadeIn(brace1),
               FadeIn(brace_txt1))
     self.wait(2)
     self.play(FadeIn(brace2),
               FadeIn(brace2_txt2))
+    self.wait(3)
+    # Multiplication
+    self.play(FadeOut(brace1), FadeOut(brace2))
+    area_result = round(x_point*3, 2)
+    multi = VGroup(brace2_txt2, TexMobject("\\cdot"),
+    brace_txt1, TexMobject(r"="), TexMobject(str(area_result)))
 
+    multi.arrange(RIGHT)
+
+    multi2 = multi
+    multi2 = multi2.move_to(0.5*RIGHT)
+    #multi[1].next_to(multi[0], RIGHT)
+    self.play(Transform(multi, multi2, run_time = 2))
+    self.wait(3)
+
+    #Create another rectangle
+    num_rectangles = 4
+    for i in range(num_rectangles):
+      # Random point to create rectangle
+      x_point = random.uniform(1, 4)
+      y_point = math.e ** math.sin(x_point)
+      transform = self.coords_to_point(x_point, y_point)
+      point = SmallDot(transform, color=RED)
+      line = self.get_vertical_line_to_graph(x_point, graph, DashedLine, color=RED)
+      self.play(FadeIn(point), Write(line3, run_time=1))
+      self.wait()
+
+      # Draw one rectangle
+      # i just neeed the horizontal line and the area of this
+
+      hline = self.get_graph(lambda x: y_point, x_min=1, x_max=4, color=RED)
+      area4 = self.get_area(hline, 1, 4)
+      self.play(Write(hline), Write(area4))
+
+    self.wait(2)
 class MontecarloPython(Scene):
     CONFIG = {
         "code_config": {
