@@ -283,8 +283,9 @@ class MonteCarloIntegration(GraphScene):
     "x_min": -2,
     "x_max": 6,
     "y_min": -4,
-    "y_max": 5
-
+    "y_max": 5,
+    "default_riemann_start_color": PURPLE,
+    "default_riemann_end_color": ORANGE,
   }
 
   def func(self, x):
@@ -296,4 +297,10 @@ class MonteCarloIntegration(GraphScene):
     graph = self.get_graph(self.func, run_time = 3)
     graph_l = self.get_graph_label(graph, label = "y = e^{sin(x)}", direction=UP + RIGHT)
     self.play(Write(graph), Write(graph_l,run_time = 7))
-    self.wait(5)
+    self.wait(3)
+
+    line1 = self.get_vertical_line_to_graph(0, graph, DashedLine, color=YELLOW)
+    line2 = self.get_vertical_line_to_graph(1, graph, DashedLine, color=YELLOW)
+    area2 = self.get_area(graph, 0, 1)
+    self.play(Write(line1), Write(line2), Write(area2, run_time = 2))
+    self.wait()
