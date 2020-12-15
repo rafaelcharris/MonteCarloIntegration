@@ -294,15 +294,16 @@ class MonteCarloIntegration(GraphScene, ZoomedScene):
   def construct(self):
     self.setup_axes(animate = True)
 
-    graph = self.get_graph(self.func, run_time = 3)
+    graph = self.get_graph(self.func)
     graph_l = self.get_graph_label(graph, label = "y = e^{sin(x)}", direction=UP + RIGHT)
-    self.play(Write(graph), Write(graph_l,run_time = 7))
+    self.play(Write(graph), Write(graph_l.scale(0.7),run_time = 7))
     self.wait(3)
 
-    line1 = self.get_vertical_line_to_graph(0, graph, DashedLine, color=YELLOW)
-    line2 = self.get_vertical_line_to_graph(1, graph, DashedLine, color=YELLOW)
-    area2 = self.get_area(graph, 0, 1)
-    self.play(Write(line1), Write(line2), Write(area2, run_time = 2))
+    line1 = self.get_vertical_line_to_graph(1, graph, DashedLine, color=YELLOW)
+    line2 = self.get_vertical_line_to_graph(4, graph, DashedLine, color=YELLOW)
+    area2 = self.get_area(graph, 1, 4)
+    self.play(Write(line1, run_time = 4), Write(line2),
+              Write(area2, run_time = 2, lag_ratio = 1))
     self.wait()
 
 class MontecarloPython(Scene):
