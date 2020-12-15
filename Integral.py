@@ -304,3 +304,21 @@ class MonteCarloIntegration(GraphScene, ZoomedScene):
     area2 = self.get_area(graph, 0, 1)
     self.play(Write(line1), Write(line2), Write(area2, run_time = 2))
     self.wait()
+
+class MontecarloPython(Scene):
+    CONFIG = {
+        "code_config": {
+            "file_name": "./assets/montecarlo_integration_code.py",
+            "font": "Input Mono",
+            "tab_width": 3,
+            "style": "monokai",
+            "language": "python"
+        }
+    }
+
+    def setup(self):
+        code = Code(**self.code_config)
+        code.set_width(FRAME_WIDTH - 1)
+        code.move_to(ORIGIN)
+        self.play(FadeInFromDown(code), run_time=5)
+        self.wait(5)
