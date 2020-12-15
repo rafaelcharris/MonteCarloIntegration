@@ -168,39 +168,43 @@ class Montecarlo(Scene):
 
 
 class EstimatePi(GraphScene):
-  CONFIG = {
-    "x_min": -3.0,
-    "x_max": 3.0,
-    "y_min": 0,
-    "y_max": 1.0,
-    "num_rects": 400,
-    "y_axis_label": "",
-    "x_axis_label": "",
-    "variable_point_label": "a",
-    "graph_origin": ORIGIN,
-    "x_axis_width": 5,
-    "y_axis_height": 5
-  }
-  def func(self, t):
-    return [math.sin(t), math.cos(t), 0]
 
   def construct(self):
-    self.setup_axes()
-    f = self.get_graph(lambda x: x**2)
 
-    circle = ParametricFunction(self.func, t_min = 0, t_max = 2*PI)
+    title = TexMobject(r"\text{Estimating } \pi")
+    self.play(Write(title.scale(2)))
+    title.to_edge(UP + LEFT)
+    self.wait()
 
-    self.play(Write(circle), run_time = 2)
-    #self.play(Write(Circle()))
+    self.play(Write(Circle().scale(2)))
+    self.play(Write(Square().scale(2)))
+
+    self.wait(1)
+
+    counter = VGroup(TextMobject("Inside: ", color = BLUE), TextMobject("Outside: ", color = RED))
+    counter.arrange(RIGHT,
+                    aligned_edge=LEFT)
+    counter.to_edge(RIGHT).scale(0.7)
+    self.play(FadeIn(counter))
+
     num_points = 24
     for point in range(num_points):
-        x = random.random() if random.random() > 0.5 else -random.random()
-        y = random.random() if random.random() > 0.5 else -random.random()
-        p = Dot([x,y, 0], color = RED)
-        self.play(FadeIn(p))
+        x = 2*random.random() if random.random() > 0.5 else -2*random.random()
+        y = 2*random.random() if random.random() > 0.5 else -2*random.random()
+        #Make color conditional on where it lands
+        red_count = 0
+        blue_count = 0
+        if x**2 + y**2 > 4.1:
+          p = SmallDot([x,y, 0], color = BLUE)
+          blue_count += 1
+        else:
+          p = SmallDot([x, y, 0], color=RED)
+          red_count += 1
+        #TODO: add counter de puntos para estimar PI
+        self.play(FadeIn(p),
+                  Transform(TextMobject("0").next_to(counter[0], RIGHT), TextMobject(str(red_count)).next_to(counter[0], RIGHT)))
         self.wait()
-    #example = Dot([0.1, 0.2, 0])
-    #self.play(Write(example), run_time=2)
+
     self.wait(7)
 
 
