@@ -278,7 +278,8 @@ class Coin(Scene):
                 Transform(counter[1], TextMobject(str(l)).to_edge(UP + RIGHT*9.6)))
     self.wait(5)
     self.step_formula()
-class MonteCarloIntegration(GraphScene, ZoomedScene):
+
+class MonteCarloIntegration(GraphScene):
   CONFIG = {
     "x_min": -2,
     "x_max": 6,
@@ -294,7 +295,7 @@ class MonteCarloIntegration(GraphScene, ZoomedScene):
   def construct(self):
     self.setup_axes(animate = True)
     title = TextMobject("Montecarlo Integration")
-    title.to_corner(UP + LEFT)
+    title.to_edge(UP + LEFT)
     self.play(FadeIn(title))
 
     graph = self.get_graph(self.func)
@@ -312,21 +313,18 @@ class MonteCarloIntegration(GraphScene, ZoomedScene):
     #Not sure which one of these should I leave
     self.play(FadeOut(area2))
 
-class MonteCarloIntegrationpt2(GraphScene, ZoomedScene):
+class MonteCarloIntegrationpt2(GraphScene):
   CONFIG = {
-    "x_min": -2,
-    "x_max": 6,
+    #"x_min": -2,
+    "x_max": 5,
     "y_min": -4,
-    "y_max": 5,
+    "y_max": 4,
+    "y_max_height": 6,
     "default_riemann_start_color": RED,
     "default_riemann_end_color": RED,
     "num_rects": 1,
     "area_opacity": 0.5,
-    "x_labeled_nums": [1, 4],
-    "zoomed_display_height": 6,
-    "zoomed_display_width": 6,
-    "zoom_activated": True,
-    "zoom_factor": 0.7,
+    "x_labeled_nums": [1, 4]
   }
   def func(self, x):
      return math.e**math.sin(x)
@@ -334,7 +332,7 @@ class MonteCarloIntegrationpt2(GraphScene, ZoomedScene):
   def construct(self):
     self.setup_axes()
     title = TextMobject("Montecarlo Integration")
-    title.to_edge(LEFT)
+    title.to_edge(LEFT + UP)
     self.add(title)
 
     graph = self.get_graph(self.func)
@@ -366,7 +364,7 @@ class MonteCarloIntegrationpt2(GraphScene, ZoomedScene):
 
     #Add braces
     brace1 = Brace(area3)
-    brace_txt1 = brace1.get_text("3")
+    brace_txt1 = brace1.get_text("3", buff = MED_LARGE_BUFF)
     brace2 = Brace(area3, direction=RIGHT)
     brace2_txt2 = brace2.get_text(str(round(x_point, 1)))
     initial_txt = VGroup(brace_txt1, brace2_txt2)
@@ -381,7 +379,7 @@ class MonteCarloIntegrationpt2(GraphScene, ZoomedScene):
     self.wait()
     area_result = round(x_point*3, 2)
     multi = VGroup(brace2_txt2, TexMobject("\\cdot"),
-    brace_txt1, TexMobject(r"="), TexMobject(str(area_result)))
+    brace_txt1, TexMobject(r"="), TexMobject(str(area_result)).scale(0.7))
 
     multi.arrange(RIGHT)
 
@@ -408,6 +406,9 @@ class MonteCarloIntegrationpt2(GraphScene, ZoomedScene):
 
     self.wait(2)
 
+class MonteCarloAbstract(GraphScene):
+  def construct(self):
+    pass
 class MontecarloPython(Scene):
     CONFIG = {
         "code_config": {
