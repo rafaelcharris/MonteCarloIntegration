@@ -2,10 +2,6 @@ from manimlib.imports import *
 
 import random
 
-def CoinFlip(times):
-    "Return the number of heads"
-    return sum([random.randint(0, 1) for _ in range(times)])
-
 class Introduction(Scene):
   def construct(self):
     text = TextMobject("Montecarlo Integration")
@@ -78,7 +74,7 @@ class RiemannRectanglesAnimation(GraphScene):
       )
       title = TextMobject("Integration")
       self.play(FadeInFromDown(title), run_time = 2)
-      self.wait(3)
+      self.wait(5)
       transform_title = TextMobject("Integration")
       transform_title.to_corner(UP + LEFT)
       self.play(
@@ -111,17 +107,16 @@ class Integration_p2(Scene):
   # https://math.stackexchange.com/questions/1625613/integrals-with-no-analytic-answer-intuition-and-proof
     #self.play(Write(pos_int[0], run_time = 2))
     self.play(AnimationGroup(
-      Write(pos_int[0], run_time  = 2),
-      Write(pos_int[1], run_time = 2),
-      lag_ratio  = 5
+      Write(pos_int[0], run_time  = 1),
+      Write(pos_int[1], run_time = 1),
+      lag_ratio  = 3
     ))
     self.wait(2)
     self.wait()
     self.remove(pos_int[0], pos_int[1])
     self.wait()
     self.play(Write(notpos_int, run_time = 2))
-    self.wait(1)
-
+    self.wait(5)
 
 class Montecarlo(Scene):
   def construct(self):
@@ -152,7 +147,15 @@ class Montecarlo(Scene):
               FadeIn(jvn_img, lag_ratio = 1),
               FadeIn(jvn_name, lag_ratio = 1)
               )
-    self.wait(2)
+    self.wait(7)
+    self.play(FadeOut(su_img),
+              FadeOut(su_name),
+              FadeOut(jvn_img),
+              FadeOut(jvn_name)
+              )
+    self.wait()
+    explication = TextMobject("Use random samples to compute a solution. ", "In the long run, the average should", "converge to the correct solution")
+
 
 class EstimatePi(GraphScene):
   CONFIG = {
@@ -188,7 +191,7 @@ class EstimatePi(GraphScene):
     areas[0].scale(0.7).to_edge(RIGHT)
     areas[1].scale(0.7).next_to(areas[0], DOWN)
     self.play(Write(areas))
-    self.wait(2)
+    self.wait(3)
     self.play(FadeOutAndShiftDown(areas), FadeOutAndShiftDown(square_brace), FadeOutAndShiftDown(square_txt), FadeOutAndShiftDown(square), FadeOutAndShiftDown(circle))
     area_ratio = TexMobject(r"\frac{A_{circle}}{A_{square}} = ", r"\text{Prob hitting the circle}")
 
@@ -198,9 +201,9 @@ class EstimatePi(GraphScene):
     area_circle_trans2 = TexMobject(r"\frac{\pi}{4}")
     area_circle_trans2.next_to(area_ratio[0], RIGHT)
     self.play(FadeIn(area_ratio[0]), FadeIn(area_ratio[1]))
-    self.wait(2)
+    self.wait(3)
     self.play(Transform(area_ratio[1], area_circle_trans, run_time = 2))
-    self.wait(2)
+    self.wait(3)
     self.play(Transform(area_ratio[1], area_circle_trans2, run_time = 2))
     self.wait(3)
 
@@ -431,9 +434,6 @@ class MontecarloPython(Scene):
         code = Code(**self.code_config)
         code.set_width(FRAME_WIDTH - 1)
         code.move_to(ORIGIN)
-        #self.play(FadeInFromDown(code), run_time=5)
-        self.wait(5)
-        self.remove(code)
         self.add(code[0])
         self.add(code[1])
         for line in range(2, len(code)):
