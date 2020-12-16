@@ -447,7 +447,7 @@ class MonteCarloAbstract(Scene):
       self.play(FadeIn(general_equation[1]))
       self.wait(2)
       self.play(FadeIn(general_equation[2]))
-      self.wait()
+      self.wait(2)
 
 
 
@@ -466,5 +466,13 @@ class MontecarloPython(Scene):
         code = Code(**self.code_config)
         code.set_width(FRAME_WIDTH - 1)
         code.move_to(ORIGIN)
-        self.play(FadeInFromDown(code), run_time=5)
+        #self.play(FadeInFromDown(code), run_time=5)
         self.wait(5)
+        self.remove(code)
+        self.add(code[0])
+        self.add(code[1])
+        for line in range(2, len(code)):
+            for row in range(len(code[line])):
+                self.add(code[line][row])
+                self.wait(0.25)
+            self.wait(1)
