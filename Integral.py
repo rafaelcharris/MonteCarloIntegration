@@ -89,7 +89,7 @@ class RiemannRectanglesAnimation(GraphScene):
 
       self.play(Write(graph), run_time = 5)
       self.wait(3)
-      # Show Riemann rectangles
+
       self.play(ReplacementTransform(flat_rectangles, riemann_rectangles_list[0]))
       self.wait()
       for r in range(1, len(riemann_rectangles_list)):
@@ -163,90 +163,6 @@ class Montecarlo(Scene):
     self.wait(2)
 
 
-class EstimatePi(GraphScene):
-  CONFIG = {
-      "x_min": -1,
-      "x_max": 10,
-      "x_axis_width": 9,
-      "x_tick_frequency": 1,
-      "x_leftmost_tick": None,  # Change if different from x_min
-      "x_labeled_nums": None,
-      "x_axis_label": "$x$",
-      "y_min": -1,
-      "y_max": 10,
-      "y_axis_height": 6,
-      "y_tick_frequency": 1,
-      "y_bottom_tick": None
-      }
-  def construct(self):
-    self.setup_axes()
-    title = TexMobject(r"\text{Estimating } \pi")
-    self.play(Write(title.scale(2)))
-    title.to_edge(UP + LEFT)
-    self.wait()
-
-    self.play(Write(Circle().scale(2)))
-    self.play(Write(Square().scale(2)))
-
-    self.wait(1)
-
-    counter = VGroup(TextMobject("Inside: ", color = RED),
-                     TextMobject("Outside: ", color = BLUE))
-    counter.arrange(RIGHT,
-                    aligned_edge=RIGHT,
-                    buff=LARGE_BUFF)
-    counter.to_edge(LEFT)
-    counter[1].next_to(counter[0], DOWN)
-    self.play(FadeIn(counter))
-
-    estimate = VGroup(TexMobject("\\pi: ", color=RED),
-                     TextMobject("N: ", color=BLUE))
-    estimate.arrange(RIGHT,
-                    aligned_edge=RIGHT,
-                    buff=LARGE_BUFF)
-    estimate.to_edge(RIGHT)
-    estimate[1].next_to(estimate[0], DOWN)
-    self.play(FadeIn(estimate))
-
-    num_points = 20
-    red_count = 0
-    blue_count = 0
-    for point in range(num_points):
-        #define coordinates
-        x = 2*random.random() if random.random() > 0.5 else -2*random.random()
-        y = 2*random.random() if random.random() > 0.5 else -2*random.random()
-
-        #Make color conditional on where it lands
-        if x**2 + y**2 > 4.1:
-          p = SmallDot([x,y, 0], color = BLUE)
-          self.play(
-            Transform(TextMobject(str(blue_count), color = BLUE).next_to(counter[1], RIGHT),
-                      TextMobject(str(blue_count + 1), color = BLUE).next_to(counter[1], RIGHT)))
-          blue_count += 1
-        else:
-          p = SmallDot([x, y, 0], color=RED)
-          self.play(
-          Transform(TextMobject(str(red_count), color=RED).next_to(counter[0], RIGHT),
-                    TextMobject(str(red_count+1), color=RED).next_to(counter[0], RIGHT)))
-          red_count += 1
-
-        #Estimate Pi
-        if red_count > 0 and blue_count > 0:
-          pi_estimate = red_count/blue_count
-        else:
-          pi_estimate = 0
-        pi_show = TextMobject(str(pi_estimate))
-        pi_value = ValueTracker(0)
-        pi_tex = DecimalNumber(pi_value.get_value()).add_updater(lambda x: x.set_value(pi_value.get_value()))
-        pi_label = TexMobject(r"\pi =")
-        group = VGroup(pi_label, pi_tex)
-        pi_tex.next_to(pi_tex, LEFT)
-        self.add(group.move_to(ORIGIN))
-        self.play(FadeIn(p),
-                  pi_value.set_value, 10)
-        self.wait(2)
-    self.wait(7)
-
 class EstimatePiv2(GraphScene):
   CONFIG = {
       "x_min": -1,
@@ -278,6 +194,7 @@ class EstimatePiv2(GraphScene):
     #Update value
     pi_value = ValueTracker(0)
     pi_tex = DecimalNumber(pi_value.get_value()).add_updater(lambda x: x.set_value(pi_value.get_value()))
+    decimal_config = {"num_decimal_places": 7}
     pi_label = TexMobject(r"\pi =")
     group = VGroup(pi_label, pi_tex)
     group.arrange(RIGHT,
