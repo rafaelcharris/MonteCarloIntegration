@@ -292,12 +292,10 @@ class MonteCarloIntegration(GraphScene):
 
     line1 = self.get_vertical_line_to_graph(1, graph, DashedLine, color=YELLOW)
     line2 = self.get_vertical_line_to_graph(4, graph, DashedLine, color=YELLOW)
-    area2 = self.get_area(graph, 1, 4)
-    self.play(Write(line1, run_time = 4), Write(line2),
-              Write(area2, run_time = 2, lag_ratio = 1))
+
+    self.play(Write(line1, run_time = 4), Write(line2))
     self.wait(2)
 
-    self.play(FadeOut(area2))
 
 class MonteCarloIntegrationpt2(GraphScene):
   CONFIG = {
