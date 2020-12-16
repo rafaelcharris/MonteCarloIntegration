@@ -271,32 +271,6 @@ class ShowCode(Scene):
     self.play(FadeInFromDown(code), run_time = 5)
     self.wait(5)
 
-class Coin(Scene):
-
-  def construct(self):
-    n = NumberLine(
-      include_tip = False,
-      include_numbers = True,
-      x_min = 0,
-      x_max = 6,
-      x_leftmost_tick = 0
-    )
-    #self.add(n)
-
-    counter = TextMobject("Number of throws: ", "0")
-    counter.to_edge(UP)
-    self.play(FadeIn(counter))
-
-    num_dots = 21
-    num_flips = 10
-    for l in range(num_dots):
-      #The position of the falling dots in the screen
-      pos = CoinFlip(num_flips) - 5
-      dot = Dot(point = [pos, -2, 0])
-      self.play(FadeInFrom(dot, [0, 10,0]),
-                Transform(counter[1], TextMobject(str(l)).to_edge(UP + RIGHT*9.6)))
-    self.wait(5)
-    self.step_formula()
 
 class MonteCarloIntegration(GraphScene):
   CONFIG = {
