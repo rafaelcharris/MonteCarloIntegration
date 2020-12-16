@@ -254,23 +254,6 @@ class EstimatePi(GraphScene):
 
 
 # example of montecarlo: https://academo.org/demos/estimating-pi-monte-carlo/
-class ShowCode(Scene):
-  CONFIG = {
-    "code_config":{
-      "file_name": "./assets/CoinFlip.py",
-      "font": "Input Mono",
-      "tab_width": 3,
-      "style": "monokai",
-      "language": "python"
-    }
-  }
-  def setup(self):
-    code = Code(**self.code_config)
-    code.set_width(FRAME_WIDTH-1)
-    code.move_to(ORIGIN)
-    self.play(FadeInFromDown(code), run_time = 5)
-    self.wait(5)
-
 
 class MonteCarloIntegration(GraphScene):
   CONFIG = {
