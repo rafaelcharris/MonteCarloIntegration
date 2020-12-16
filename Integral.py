@@ -162,8 +162,7 @@ class Montecarlo(Scene):
     self.play(FadeIn(dice)) #This is not working
     self.wait(2)
 
-
-class EstimatePiv2(GraphScene):
+class EstimatePi(GraphScene):
   CONFIG = {
       "x_min": -1,
       "x_max": 10,
@@ -183,18 +182,23 @@ class EstimatePiv2(GraphScene):
     self.play(Write(title.scale(2)))
     title.to_edge(UP + LEFT)
     self.wait()
+    area_circle = TexMobject(r"\frac{A_{circle}}{A_{square}} = ", r"\text{Prob hitting the circle}")
+    self.play(FadeIn(area_circle[0]), FadeIn(area_circle[1], lag_ratio = 1))
+    equatios = TextMobject(r"\frac{N_{inside}}{N_{total}}", r"=", r"Prob")
     circle = Circle().scale(2)
     self.play(Write(circle))
     self.play(Write(Square().scale(2)))
     self.wait(1)
 
-    num_points = 100
+    #num_points = 500 #This value works
+    num_points = 10 #Just for testing
     red_count = 0
     blue_count = 0
     #Update value
     pi_value = ValueTracker(0)
     pi_tex = DecimalNumber(pi_value.get_value()).add_updater(lambda x: x.set_value(pi_value.get_value()))
     decimal_config = {"num_decimal_places": 7}
+    pi_tex.get_formatter(**decimal_config)
     pi_label = TexMobject(r"\pi =")
     group = VGroup(pi_label, pi_tex)
     group.arrange(RIGHT,
@@ -202,7 +206,7 @@ class EstimatePiv2(GraphScene):
                     buff=LARGE_BUFF)
     pi_label.next_to(pi_tex, LEFT)
     self.add(group.to_edge(2*LEFT))
-
+    to_plot = []
     for point in range(num_points):
         #define coordinates
         x = 2*random.random() if random.random() > 0.5 else -2*random.random()
@@ -216,14 +220,17 @@ class EstimatePiv2(GraphScene):
           red_count += 1
         #Estimate Pi
         if red_count > 0 and blue_count > 0:
-          pi_estimate = red_count/blue_count
+          pi_estimate = 4*red_count/(red_count + blue_count)
+          to_plot.append([point, pi_estimate])
         else:
           pi_estimate = 0
-        #pi_value.set_value(pi_estimate)
-        self.play(FadeIn(p),
+
+        self.play(FadeIn(p, run_time = 0.2),
                   pi_value.set_value, pi_estimate)
     self.wait(7)
     self.setup_axes(animate=True)
+
+
 
 
 # example of montecarlo: https://academo.org/demos/estimating-pi-monte-carlo/
@@ -272,7 +279,7 @@ class MonteCarloIntegrationpt2(GraphScene):
     "default_riemann_start_color": RED,
     "default_riemann_end_color": RED,
     "num_rects": 1,
-    "area_opacity": 0.5,
+    "area_opacity": 0.2,
     "x_labeled_nums": [1, 4]
   }
   def func(self, x):
