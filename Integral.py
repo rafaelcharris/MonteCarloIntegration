@@ -363,11 +363,11 @@ class MonteCarloIntegrationpt2(GraphScene):
     self.play(FadeOut(brace1), FadeOut(brace2))
     self.wait()
     area_result = round(x_point*3, 2)
-    multi = VGroup(TextMobject("Estimated Area:"), brace2_txt2, TexMobject("\\cdot"),
-    brace_txt1, TexMobject(r"="), TexMobject(str(area_result)).scale(0.7))
+    multi = VGroup(TextMobject("Estimated Area:"), brace2_txt2.scale(10/7), TexMobject("\\cdot"),
+    brace_txt1.scale(10/7), TexMobject(r"="), TexMobject(str(area_result)))
 
     multi.arrange(RIGHT)
-    multi.move_to(0.5*RIGHT + 2.5*UP)
+    multi.to_edge(2*RIGHT + 4.5*UP)
 
     self.play(FadeIn(multi), run_time = 3)
     self.wait(3)
@@ -376,13 +376,12 @@ class MonteCarloIntegrationpt2(GraphScene):
     area_tracker = ValueTracker(0)
     area_value = DecimalNumber(area_tracker.get_value()).add_updater(lambda x: x.set_value(area_tracker.get_value()))
 
-    estimate_text = TexMobject(r"\text{Estimated Area = }")
+    estimate_text = TexMobject(r"\text{Estimated Area =}")
     group = VGroup(estimate_text, area_value)
-    group.arrange(RIGHT,
-                  aligned_edge=RIGHT,
-                  buff=LARGE_BUFF)
-    estimate_text.next_to(area_tracker, LEFT)
-    self.add(group.to_edge(2 * LEFT))
+    #group.arrange(RIGHT,
+    #              buff=0.1)
+    estimate_text.next_to(area_tracker, LEFT, buff = 0.5)
+    self.play(Write(group.to_edge(2*RIGHT + 4.5*UP)))
 
     #Create another rectangle
     num_rectangles = 10
