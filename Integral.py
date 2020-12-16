@@ -154,13 +154,6 @@ class Montecarlo(Scene):
               )
     self.wait(2)
 
-    dice = SVGMobject("./assets/img/dice.svg")
-    dice.to_edge(RIGHT)
-    dice.scale(2)
-    #self.play(Write(dice)) This is complicated because of colors
-    self.play(FadeIn(dice)) #This is not working
-    self.wait(2)
-
 class EstimatePi(GraphScene):
   CONFIG = {
       "x_min": -1,
