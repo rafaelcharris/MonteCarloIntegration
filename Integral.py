@@ -380,15 +380,15 @@ class MonteCarloIntegrationpt2(GraphScene):
     estimate_text = TexMobject(r"\text{Estimated Area =}")
     group = VGroup(estimate_text, area_value)
 
-    estimate_text.next_to(area_tracker, LEFT, buff = 0.5)
-    self.play(Write(group.to_edge(2*RIGHT + 4.5*UP)))
+    estimate_text.next_to(area_tracker, LEFT, buff = 0.7)
+    self.play(FadeIn(group.to_edge(2*RIGHT + 4.5*UP)))
 
     #Create another rectangle
     num_rectangles = 10
     estimate_area = []
     true_value = TextMobject("True Value: 5.16462")
 
-    self.play(true_value.to_edge(2*RIGHT + 5.5*UP))
+    self.play(FadeIn(true_value.to_edge(2*RIGHT + 2.5*UP)))
 
     for i in range(num_rectangles):
       # Random point to create rectangle
