@@ -179,7 +179,8 @@ class EstimatePi(GraphScene):
   def construct(self):
     title = TexMobject(r"\text{Estimating } \pi")
     self.play(Write(title.scale(2)))
-    title.to_edge(UP + LEFT)
+    title2 = title.to_edge(UP + LEFT)
+    self.play(Transform(title, title2))
     self.wait()
     #First Circle and Square
     circle = Circle().scale(2)
@@ -212,9 +213,12 @@ class EstimatePi(GraphScene):
 
     equation = TexMobject(r"\frac{N_{inside}}{N_{total}} = ")
     equation.next_to(area_circle_trans2, LEFT)
+    pi_equivalence = TexMobject(r"4 \cdot \frac{N_{inside}}{N_{total}} =\pi")
     self.play(Transform(area_ratio[0], equation))
     self.wait(2)
-    self.play(FadeOutAndShift(area_ratio[1]), FadeOutAndShiftDown(area_ratio[1]))
+    self.play(Transform(area_ratio[0],pi_equivalence), FadeOutAndShiftDown(area_ratio[1]))
+    self.wait(1)
+    self.play(FadeOutAndShiftDown(area_ratio[0]))
     self.wait()
     circle = Circle().scale(2)
     self.play(Write(circle, run_time = 2))
@@ -228,8 +232,7 @@ class EstimatePi(GraphScene):
     #Update value
     pi_value = ValueTracker(0)
     pi_tex = DecimalNumber(pi_value.get_value()).add_updater(lambda x: x.set_value(pi_value.get_value()))
-    decimal_config = {"num_decimal_places": 7}
-    pi_tex.get_formatter(**decimal_config)
+
     pi_label = TexMobject(r"\pi =")
     group = VGroup(pi_label, pi_tex)
     group.arrange(RIGHT,
