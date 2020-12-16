@@ -124,10 +124,6 @@ class Integration_p2(Scene):
     self.wait(1)
 
 
-#TODO: WHAT IS AN INTEGRAL,
-# WHAT IS A MONTECARLO PROCESS,
-# WHAT IS A MONTECARLO INTERGAL
-
 class Montecarlo(Scene):
   def construct(self):
     su_img = ImageMobject("./assets/img/ulman.jpg")
@@ -212,14 +208,13 @@ class EstimatePi(GraphScene):
     estimate[1].next_to(estimate[0], DOWN)
     self.play(FadeIn(estimate))
 
-    num_points = 200
+    num_points = 20
     red_count = 0
     blue_count = 0
     for point in range(num_points):
         #define coordinates
         x = 2*random.random() if random.random() > 0.5 else -2*random.random()
         y = 2*random.random() if random.random() > 0.5 else -2*random.random()
-
 
         #Make color conditional on where it lands
         if x**2 + y**2 > 4.1:
@@ -251,6 +246,68 @@ class EstimatePi(GraphScene):
                   pi_value.set_value, 10)
         self.wait(2)
     self.wait(7)
+
+class EstimatePiv2(GraphScene):
+  CONFIG = {
+      "x_min": -1,
+      "x_max": 10,
+      "x_axis_width": 9,
+      "x_tick_frequency": 1,
+      "x_leftmost_tick": None,  # Change if different from x_min
+      "x_labeled_nums": None,
+      "x_axis_label": "$x$",
+      "y_min": -1,
+      "y_max": 10,
+      "y_axis_height": 6,
+      "y_tick_frequency": 1,
+      "y_bottom_tick": None
+      }
+  def construct(self):
+    title = TexMobject(r"\text{Estimating } \pi")
+    self.play(Write(title.scale(2)))
+    title.to_edge(UP + LEFT)
+    self.wait()
+    circle = Circle().scale(2)
+    self.play(Write(circle))
+    self.play(Write(Square().scale(2)))
+    self.wait(1)
+
+    num_points = 10
+    red_count = 0
+    blue_count = 0
+    #Update value
+    pi_value = ValueTracker(0)
+    pi_tex = DecimalNumber(pi_value.get_value()).add_updater(lambda x: x.set_value(pi_value.get_value()))
+    pi_label = TexMobject(r"\pi =")
+    group = VGroup(pi_label, pi_tex)
+    group.arrange(RIGHT,
+                  aligned_edge=RIGHT,
+                    buff=LARGE_BUFF)
+    pi_label.next_to(pi_tex, LEFT)
+    self.add(group.to_edge(RIGHT))
+
+    for point in range(num_points):
+        #define coordinates
+        x = 2*random.random() if random.random() > 0.5 else -2*random.random()
+        y = 2*random.random() if random.random() > 0.5 else -2*random.random()
+        #Make color conditional on where it lands
+        if x**2 + y**2 > 4.1:
+          p = SmallDot([x,y, 0], color = BLUE)
+          blue_count += 1
+        else:
+          p = SmallDot([x, y, 0], color=RED)
+          red_count += 1
+        #Estimate Pi
+        if red_count > 0 and blue_count > 0:
+          pi_estimate = red_count/blue_count
+        else:
+          pi_estimate = 0
+        pi_value.set_value(pi_estimate)
+        self.play(FadeIn(p),
+                  pi_value.set_value, pi_estimate)
+        self.wait(2)
+    self.wait(7)
+    self.setup_axes()
 
 
 # example of montecarlo: https://academo.org/demos/estimating-pi-monte-carlo/
@@ -405,8 +462,6 @@ class MonteCarloAbstract(Scene):
       self.wait(2)
       self.play(FadeIn(general_equation[2]))
       self.wait(2)
-
-
 
 class MontecarloPython(Scene):
     CONFIG = {
