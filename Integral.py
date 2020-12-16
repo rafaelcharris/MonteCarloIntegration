@@ -175,7 +175,7 @@ class EstimatePi(GraphScene):
       "y_axis_height": 6,
       "y_tick_frequency": 1,
       "y_bottom_tick": None
-      }
+  }
   def construct(self):
     title = TexMobject(r"\text{Estimating } \pi")
     self.play(Write(title.scale(2)))
@@ -184,11 +184,11 @@ class EstimatePi(GraphScene):
     #First Circle and Square
     circle = Circle().scale(2)
     square = Square().scale(2)
-    self.play(Write(circle), Write(square))
+    self.play(Write(circle, run_time = 2), Write(square, run_time = 2))
     #braces
     square_brace = Brace(square)
     square_txt = square_brace.get_text("x")
-    self.play(Write(square_brace), Write(square_txt))
+    self.play(Write(square_brace, run_time = 1), Write(square_txt))
     self.wait(2)
     areas = TexMobject(r"A_{circle} = \pi\cdot (\frac{x}{2})^2", r"A_{square} = x^2")
     areas[0].scale(0.7).to_edge(RIGHT)
@@ -203,18 +203,18 @@ class EstimatePi(GraphScene):
     area_circle_trans.next_to(area_ratio[0], RIGHT)
     area_circle_trans2 = TexMobject(r"\frac{\pi}{4}")
     area_circle_trans2.next_to(area_ratio[0], RIGHT)
-    self.play(FadeIn(area_ratio))
+    self.play(FadeIn(area_ratio[0]), FadeIn(area_ratio[1]))
     self.wait(2)
     self.play(Transform(area_ratio[1], area_circle_trans, run_time = 2))
     self.wait(2)
-    self.play(Transform(area_circle_trans, area_circle_trans2, run_time = 2))
+    self.play(Transform(area_ratio[1], area_circle_trans2, run_time = 2))
     self.wait(3)
-    self.remove(area_circle_trans)
+
     equation = TexMobject(r"\frac{N_{inside}}{N_{total}} = ")
     equation.next_to(area_circle_trans2, LEFT)
     self.play(Transform(area_ratio[0], equation))
     self.wait(2)
-    self.play(FadeOutAndShift(equation), FadeOutAndShiftDown(area_circle_trans2))
+    self.play(FadeOutAndShift(area_ratio[1]), FadeOutAndShiftDown(area_ratio[1]))
     self.wait()
     circle = Circle().scale(2)
     self.play(Write(circle, run_time = 2))
@@ -259,7 +259,6 @@ class EstimatePi(GraphScene):
         self.play(FadeIn(p, run_time = 0.2),
                   pi_value.set_value, pi_estimate)
     self.wait(7)
-    self.setup_axes(animate=True)
 
 
 # example of montecarlo: https://academo.org/demos/estimating-pi-monte-carlo/
@@ -295,7 +294,6 @@ class MonteCarloIntegration(GraphScene):
               Write(area2, run_time = 2, lag_ratio = 1))
     self.wait(2)
 
-    #Not sure which one of these should I leave
     self.play(FadeOut(area2))
 
 class MonteCarloIntegrationpt2(GraphScene):
@@ -378,14 +376,17 @@ class MonteCarloIntegrationpt2(GraphScene):
 
     estimate_text = TexMobject(r"\text{Estimated Area =}")
     group = VGroup(estimate_text, area_value)
-    #group.arrange(RIGHT,
-    #              buff=0.1)
+
     estimate_text.next_to(area_tracker, LEFT, buff = 0.5)
     self.play(Write(group.to_edge(2*RIGHT + 4.5*UP)))
 
     #Create another rectangle
     num_rectangles = 10
     estimate_area = []
+    true_value = TextMobject("True Value: 5.16462")
+
+    self.play(true_value.to_edge(2*RIGHT + 5.5*UP))
+
     for i in range(num_rectangles):
       # Random point to create rectangle
       x_point = random.uniform(1, 4)
@@ -446,3 +447,4 @@ class MontecarloPython(Scene):
                 self.add(code[line][row])
                 self.wait(0.25)
             self.wait(1)
+        self.wait(4)
