@@ -272,7 +272,7 @@ class EstimatePiv2(GraphScene):
     self.play(Write(Square().scale(2)))
     self.wait(1)
 
-    num_points = 10
+    num_points = 100
     red_count = 0
     blue_count = 0
     #Update value
@@ -284,7 +284,7 @@ class EstimatePiv2(GraphScene):
                   aligned_edge=RIGHT,
                     buff=LARGE_BUFF)
     pi_label.next_to(pi_tex, LEFT)
-    self.add(group.to_edge(2*RIGHT + 0.2*UP))
+    self.add(group.to_edge(2*LEFT))
 
     for point in range(num_points):
         #define coordinates
@@ -302,11 +302,11 @@ class EstimatePiv2(GraphScene):
           pi_estimate = red_count/blue_count
         else:
           pi_estimate = 0
-        pi_value.set_value(pi_estimate)
+        #pi_value.set_value(pi_estimate)
         self.play(FadeIn(p),
                   pi_value.set_value, pi_estimate)
     self.wait(7)
-    self.setup_axes()
+    self.setup_axes(animate=True)
 
 
 # example of montecarlo: https://academo.org/demos/estimating-pi-monte-carlo/
