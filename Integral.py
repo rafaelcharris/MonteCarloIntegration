@@ -33,8 +33,7 @@ class ToC(Scene):
     )
     toc = VGroup(TextMobject("1. Integration"),
                  TextMobject("2. Montecarlo Methods"),
-                 TextMobject("3. Examples"),
-                 TextMobject("4. Montecarlo Integration"))
+                 TextMobject("3. Montecarlo Integration"))
     toc.arrange(DOWN, buff=LARGE_BUFF, aligned_edge=LEFT)
     toc.to_edge(DOWN, buff=LARGE_BUFF)
 
@@ -263,8 +262,6 @@ class EstimatePi(GraphScene):
     self.setup_axes(animate=True)
 
 
-
-
 # example of montecarlo: https://academo.org/demos/estimating-pi-monte-carlo/
 
 class MonteCarloIntegration(GraphScene):
@@ -366,16 +363,27 @@ class MonteCarloIntegrationpt2(GraphScene):
     self.play(FadeOut(brace1), FadeOut(brace2))
     self.wait()
     area_result = round(x_point*3, 2)
-    multi = VGroup(brace2_txt2, TexMobject("\\cdot"),
+    multi = VGroup(TextMobject("Estimated Area:"), brace2_txt2, TexMobject("\\cdot"),
     brace_txt1, TexMobject(r"="), TexMobject(str(area_result)).scale(0.7))
 
     multi.arrange(RIGHT)
-
-    multi.move_to(0.5*RIGHT)
+    multi.move_to(0.5*RIGHT + 2.5*UP)
 
     self.play(FadeIn(multi), run_time = 3)
     self.wait(3)
     self.play(FadeOut(multi))
+
+    area_tracker = ValueTracker(0)
+    area_value = DecimalNumber(area_tracker.get_value()).add_updater(lambda x: x.set_value(area_tracker.get_value()))
+
+    estimate_text = TexMobject(r"\text{Estimated Area = }")
+    group = VGroup(estimate_text, area_value)
+    group.arrange(RIGHT,
+                  aligned_edge=RIGHT,
+                  buff=LARGE_BUFF)
+    estimate_text.next_to(area_tracker, LEFT)
+    self.add(group.to_edge(2 * LEFT))
+
     #Create another rectangle
     num_rectangles = 10
     estimate_area = []
@@ -395,13 +403,9 @@ class MonteCarloIntegrationpt2(GraphScene):
 
       estimate_area.append(3*y_point)
       estimate_area_np = np.array(estimate_area)
-      estimate_value = TextMobject(str(round(estimate_area_np.mean(), 3)))
-      estimate_text = TextMobject("Estimated Area = ")
-      estimate_group = VGroup(estimate_text, estimate_value)
-      estimate_group.arrange(RIGHT)
-      estimate_group.to_edge(0.2*RIGHT + 0.5*UP)
-      self.play(FadeIn(estimate_group),
-                aligned_edge=LEFT)
+      estimate_value = str(round(estimate_area_np.mean(), 3))
+
+      self.play(area_tracker.set_value, estimate_value)
     self.wait(2)
 
 class MonteCarloAbstract(Scene):
